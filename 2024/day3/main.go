@@ -33,9 +33,9 @@ func main() {
 
 	// problem 2
 	mulDoDontRE := regexp.MustCompile(`(mul|do|don't)\((|\d{1,3},\d{1,3})\)`)
+	proc := Processor{}
 
 	var problemOneSum, problemTwoSum int
-	proc := Processor{}
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		t := scanner.Text()
