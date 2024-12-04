@@ -10,6 +10,17 @@ import (
 	"strings"
 )
 
+type ProcessorState int
+
+const (
+	Do ProcessorState = iota
+	Dont
+)
+
+type Processor struct {
+	State ProcessorState
+}
+
 func main() {
 	f, err := os.Open("input.txt")
 	if err != nil {
@@ -17,18 +28,41 @@ func main() {
 	}
 	defer f.Close()
 
-	re := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`)
+	// problem 1
+	mulRE := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`)
 
-	var sum int
+	// problem 2
+	mulDoDontRE := regexp.MustCompile(`(mul|do|don't)\((|\d{1,3},\d{1,3})\)`)
+
+	var problemOneSum, problemTwoSum int
+	proc := Processor{}
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		matches := re.FindAllString(scanner.Text(), -1)
-		for _, m := range matches {
-			sum += mustEvaluateMul(m)
+		t := scanner.Text()
+
+		// problem 1
+		mulMatches := mulRE.FindAllString(t, -1)
+		for _, m := range mulMatches {
+			problemOneSum += mustEvaluateMul(m)
+		}
+
+		// problem 2
+		mulDoDontmatches := mulDoDontRE.FindAllString(t, -1)
+		for _, m := range mulDoDontmatches {
+			if m == "do()" {
+				proc.State = Do
+			} else if m == "don't()" {
+				proc.State = Dont
+			} else {
+				if proc.State == Do {
+					problemTwoSum += mustEvaluateMul(m)
+				}
+			}
 		}
 	}
 
-	fmt.Printf("answer to problem 1: %d\n", sum)
+	fmt.Printf("answer to problem 1: %d\n", problemOneSum)
+	fmt.Printf("answer to problem 2: %d\n", problemTwoSum)
 }
 
 func mustEvaluateMul(str string) int {
