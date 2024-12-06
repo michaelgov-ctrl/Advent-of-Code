@@ -10,13 +10,13 @@ import (
 )
 
 type PageSet []int
-type Precedence map[int][]int
+type PagePrecedence map[int][]int
 
 func (ps PageSet) MiddleValue() int {
 	return ps[len(ps)/2]
 }
 
-func (ps PageSet) Order(p Precedence) {
+func (ps PageSet) Order(p PagePrecedence) {
 	slices.SortFunc(ps, func(a, b int) int {
 		if slices.Contains(p[a], b) {
 			return 1
@@ -25,7 +25,7 @@ func (ps PageSet) Order(p Precedence) {
 	})
 }
 
-func (ps PageSet) isOrdered(p Precedence) bool {
+func (ps PageSet) isOrdered(p PagePrecedence) bool {
 	for i := len(ps) - 1; i >= 0; i-- {
 		for j := i - 1; j >= 0; j-- {
 			if slices.Contains(p[ps[i]], ps[j]) {
@@ -65,14 +65,14 @@ func getPageSets() []PageSet {
 	return res
 }
 
-func getPrecedence() Precedence {
+func getPagePrecedence() PagePrecedence {
 	f, err := os.Open("precedence.txt")
 	if err != nil {
 		panic("precedence: ouchie")
 	}
 	defer f.Close()
 
-	precedence := make(Precedence)
+	precedence := make(PagePrecedence)
 	scanner := bufio.NewScanner(f)
 
 	for scanner.Scan() {

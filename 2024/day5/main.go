@@ -6,14 +6,14 @@ import (
 
 func main() {
 	pageSets := getPageSets()
-	precedence := getPrecedence()
+	pagePrecedence := getPagePrecedence()
 
 	var problem1Sum, problem2Sum int
 	for _, ps := range pageSets {
-		if ps.isOrdered(precedence) {
+		if ps.isOrdered(pagePrecedence) {
 			problem1Sum += ps.MiddleValue()
 		} else {
-			ps.Order(precedence)
+			ps.Order(pagePrecedence)
 			problem2Sum += ps.MiddleValue()
 		}
 	}
