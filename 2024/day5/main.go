@@ -5,8 +5,8 @@ import (
 )
 
 func main() {
-	precedence := getPrecedence()
 	pageSets := getPageSets()
+	precedence := getPrecedence()
 
 	var problem1Sum, problem2Sum int
 	for _, ps := range pageSets {
