@@ -20,8 +20,9 @@ func main() {
 		area:            cursor.NewArea(),
 		floorplan:       fp,
 		guard: Guard{
-			Direction: Up,
-			Position:  pos,
+			UniqueStepCount: 1,
+			Direction:       Up,
+			Position:        pos,
 		},
 	}
 
@@ -33,16 +34,5 @@ func main() {
 
 	game.moveGuardTillOffMapAndRender()
 
-	var sum = 1
-	for _, row := range game.floorplan {
-		for _, r := range row {
-			if r == 'X' {
-				sum++
-			}
-		}
-	}
-
-	fmt.Println("ackshully: ", sum)
-	fmt.Println("problem 1 ans: ", game.guard.UniqueStepCount)
-
+	fmt.Println("problem 1 answer: ", game.guard.UniqueStepCount)
 }
