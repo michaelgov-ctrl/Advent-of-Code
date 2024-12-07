@@ -26,6 +26,12 @@ func main() {
 	}
 
 	game.area.Update(game.renderedContent)
+	for _, row := range game.floorplan {
+		game.renderedContent += fmt.Sprintf("%s\n", string(row))
+	}
+	game.area.Update(game.renderedContent)
+
+	game.moveGuardTillOffMapAndRender()
 
 	var sum = 1
 	for _, row := range game.floorplan {
@@ -34,12 +40,9 @@ func main() {
 				sum++
 			}
 		}
-		game.renderedContent += fmt.Sprintf(" + %s\n", string(row))
 	}
 
-	game.guard.moveTillOffMap(game.floorplan)
-	game.area.Update(game.renderedContent)
-
-	fmt.Println("problem 1 ans: ", sum)
+	fmt.Println("ackshully: ", sum)
+	fmt.Println("problem 1 ans: ", game.guard.UniqueStepCount)
 
 }

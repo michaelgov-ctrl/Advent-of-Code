@@ -1,7 +1,15 @@
 package main
 
+import (
+	"fmt"
+	"time"
+
+	"atomicgo.dev/cursor"
+)
+
 type Guard struct {
-	Direction Direction
+	UniqueStepCount int
+	Direction       Direction
 	Position
 }
 
@@ -18,30 +26,79 @@ type Position struct {
 	X, Y int
 }
 
-func (g *Guard) moveTillOffMap(fp FloorPlan) {
+func (g *game) moveGuardTillOffMapAndRender() {
 	for {
-		if err := g.move(fp); err != nil {
+		if err := g.moveGuard(); err != nil {
 			break
 		}
+
+		cursor.Bottom()
+		cursor.Up(len(g.floorplan) - g.guard.Y)
+		cursor.StartOfLine()
+		fmt.Print(string(g.floorplan[g.guard.Y]))
+
+		//g.renderAboveAndBelow()
+
+		time.Sleep(100 * time.Millisecond)
 	}
 }
 
-func (g *Guard) move(fp FloorPlan) error {
-	pos := g.nextPosition()
-	terrain, err := pos.getTerrain(fp)
+func (g *game) renderLine(line int) {
+	cursor.StartOfLine()
+	fmt.Print(string(g.floorplan[line]))
+}
+
+func (g *game) renderAboveAndBelow() {
+	cursor.Bottom()
+	cursor.Up((len(g.floorplan) - g.guard.Y) - 1)
+	for i := 0; i < 3; i++ {
+		g.renderLine((len(g.floorplan) - g.guard.Y) + i)
+	}
+}
+
+func (g *game) moveGuard() error {
+	pos := g.guard.nextPosition()
+	terrain, err := pos.getTerrain(g.floorplan)
 	if err != nil {
 		return err
 	}
 
 	switch terrain {
 	case '#':
-		g.TurnRight()
+		g.guard.TurnRight()
+	case '.':
+		g.guard.UniqueStepCount++
+
+		g.guard.leaveX(g.floorplan)
+		g.guard.Position = pos
 	default:
-		g.leaveX(fp)
-		g.Position = pos
+		g.guard.leaveX(g.floorplan)
+		g.guard.Position = pos
 	}
 
+	g.guard.updatePositionOnFloorPlan(g.floorplan)
+
 	return nil
+}
+
+func (g *Guard) updatePositionOnFloorPlan(fp FloorPlan) {
+	fp[g.Y][g.X] = g.directionSymbol()
+}
+
+func (g *Guard) directionSymbol() rune {
+	var res = '何'
+	switch g.Direction {
+	case Up:
+		res = '^'
+	case Down:
+		res = 'v'
+	case Left:
+		res = '<'
+	case Right:
+		res = '>'
+	}
+
+	return res
 }
 
 func (g *Guard) nextPosition() Position {
