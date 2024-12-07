@@ -28,7 +28,7 @@ func (g *game) moveGuardTillOffMapAndRender() {
 			fmt.Print(string(g.floorplan[g.guard.Y-1]))
 		}
 
-		time.Sleep(10 * time.Millisecond)
+		time.Sleep(2 * time.Millisecond)
 
 	}
 

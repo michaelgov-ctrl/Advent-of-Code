@@ -2,17 +2,20 @@ package main
 
 import (
 	"bufio"
+	"embed"
 	"errors"
 	"fmt"
-	"os"
 )
 
 var ErrOffMap = errors.New("off map")
 
 type FloorPlan [][]rune
 
+//go:embed input.txt
+var input embed.FS
+
 func loadMap() (FloorPlan, Position) {
-	f, err := os.Open("input.txt")
+	f, err := input.Open("input.txt")
 	if err != nil {
 		panic(fmt.Sprintf("failed to open file: %v", err))
 	}
