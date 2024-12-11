@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -74,6 +75,8 @@ func (ct *CalibrationTest) calculatedResult() bool {
 				res += ct.Operands[i+1]
 			case 'x':
 				res *= ct.Operands[i+1]
+			case '|':
+				res = concat(res, ct.Operands[i+1])
 			default:
 				panic(fmt.Sprintf("unexpected operator: %v", v))
 			}
@@ -97,4 +100,9 @@ func (o Operators) generateOperations(length int, current string, results *[]str
 	for _, char := range o {
 		o.generateOperations(length, current+string(char), results)
 	}
+}
+
+func concat(a, b int) int {
+	numDigits := int(math.Log10(float64(b))) + 1
+	return a*int(math.Pow(10, float64(numDigits))) + b
 }
