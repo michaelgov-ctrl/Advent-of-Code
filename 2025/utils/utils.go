@@ -2,14 +2,13 @@ package utils
 
 import (
 	"bufio"
-	"log"
 	"os"
 )
 
 func ForEachLineInFile(path string, f func(s string)) {
 	file, err := os.Open(path)
 	if err != nil {
-		log.Fatal(err)
+		panic(err) // I'm here for a good time, not for a long time
 	}
 	defer file.Close()
 
@@ -18,4 +17,5 @@ func ForEachLineInFile(path string, f func(s string)) {
 	for scanner.Scan() {
 		f(scanner.Text())
 	}
+
 }
