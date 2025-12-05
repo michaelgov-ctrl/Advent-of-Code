@@ -50,14 +50,13 @@ func (a *animator) problem1ProcFunc(fp floorplan) int {
 	a.area.Top()
 	for i, row := range fp {
 		for j, it := range row {
-			if it == paperroll {
-				if fp.searchAroundIndex(validator, i, j) < SURROUNDING_LIMIT {
-					fp[i][j] = removed
-					picked++
-					a.updateFloorPlanRow(fp, i)
-				}
+			if it == paperroll && fp.searchAroundIndex(validator, i, j) < SURROUNDING_LIMIT {
+				fp[i][j] = removed
+				picked++
+				a.updateFloorPlanRow(fp, i)
 			}
 		}
+
 		a.area.Down(1)
 	}
 
@@ -76,17 +75,17 @@ func (a *animator) problem2ProcFunc(fp floorplan) int {
 	for found {
 		found = false
 		a.area.Top()
+
 		for i, row := range fp {
 			for j, it := range row {
-				if it == paperroll {
-					if fp.searchAroundIndex(validator, i, j) < SURROUNDING_LIMIT {
-						fp[i][j] = removed
-						picked++
-						found = true
-						a.updateFloorPlanRow(fp, i)
-					}
+				if it == paperroll && fp.searchAroundIndex(validator, i, j) < SURROUNDING_LIMIT {
+					fp[i][j] = removed
+					picked++
+					found = true
+					a.updateFloorPlanRow(fp, i)
 				}
 			}
+
 			a.area.Down(1)
 		}
 	}
