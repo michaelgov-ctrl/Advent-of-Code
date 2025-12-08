@@ -17,5 +17,4 @@ func ForEachLineInFile(path string, f func(s string)) {
 	for scanner.Scan() {
 		f(scanner.Text())
 	}
-
 }
