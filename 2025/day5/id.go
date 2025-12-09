@@ -84,6 +84,7 @@ func parseIdRanges(path string) []idRange {
 
 		ranges = append(ranges, ir)
 	})
+
 	return ranges
 }
 
